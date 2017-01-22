@@ -1,9 +1,10 @@
-from flask import url_for, request
+from flask import url_for, request, Blueprint
 from voluptuous import Schema, REMOVE_EXTRA
 
 from myapp.api_helpers import ApiException, ApiResult
 from myapp.decorators import dataschema
-from . import blueprint
+
+blueprint = Blueprint('core', __name__)
 
 @blueprint.route('/')
 def index():

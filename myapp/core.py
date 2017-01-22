@@ -4,7 +4,7 @@
 from flask import Flask
 from werkzeug.utils import find_modules, import_string
 
-from myapp.api_helpers import ApiException
+from myapp.api_helpers import ApiException, ApiResult
 
 def create_app(config=None):
     app = ApiFlask(__name__)
@@ -26,7 +26,7 @@ def register_blueprints(app):
 
     Just take a look in the blueprints directory.
     """
-    for name in find_modules('myapp.blueprints', include_packages=True):
+    for name in find_modules('myapp.blueprints', recursive=True):
         mod = import_string(name)
         if hasattr(mod, 'blueprint'):
             app.register_blueprint(mod.blueprint)
