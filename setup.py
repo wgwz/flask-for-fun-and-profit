@@ -6,6 +6,7 @@ setup(
     description='code from armins talk, flask for fun and profit',
     packages=find_packages(),
     install_requires=[
-        'flask'
+        'flask',
+        'voluptuous==0.9.3'
     ]
 )
