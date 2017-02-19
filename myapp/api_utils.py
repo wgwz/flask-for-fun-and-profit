@@ -1,4 +1,11 @@
-from flask import json, Response
+from flask import Flask, json, Response
+
+class ApiFlask(Flask):
+    """Response Converter"""
+    def make_response(self, rv):
+        if isinstance(rv, ApiResult):
+            return rv.to_response()
+        return Flask.make_response(self, rv)
 
 class ApiResult(object):
     """Result Wrapper"""

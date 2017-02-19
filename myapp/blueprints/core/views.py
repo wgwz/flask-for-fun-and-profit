@@ -1,27 +1,43 @@
 from flask import url_for, request, Blueprint
-from voluptuous import Schema, REMOVE_EXTRA
+from flask.views import MethodView
+from voluptuous import Schema, REMOVE_EXTRA, Required
 
-from myapp.api_helpers import ApiException, ApiResult
-from myapp.decorators import dataschema
+from myapp.api_utils import ApiException
+from myapp.decorators import dataschema, apiresult
 
-blueprint = Blueprint('core', __name__)
+bp = Blueprint('core', __name__, url_prefix='/v1.0')
 
-@blueprint.route('/')
+@bp.route('/')
+@apiresult
 def index():
     return url_for('core.index', _external=True)
 
-@blueprint.route('/add')
-def add_numbers():
+@bp.route('/sum')
+@apiresult
+def sum():
     a = request.args.get('a', type=int)
     b = request.args.get('b', type=int)
     if a is None or b is None:
         raise ApiException('Numbers must be integers')
-    return ApiResult({'result': a + b})
+    return {'result': a + b}
 
-@blueprint.route('/subtract', methods=['POST'])
-@dataschema(Schema({
-    'a': int,
-    'b': int
-}, extra=REMOVE_EXTRA))
-def sub_numbers(a, b):
-    return ApiResult({'diff': a - b})
+
+schema = Schema({
+    Required('a'): int,
+    Required('b'): int
+}, extra=REMOVE_EXTRA)
+
+@bp.route('/difference', methods=['POST'])
+@apiresult
+@dataschema(schema)
+def difference(a, b):
+    return {'difference': a - b}
+
+class DifferenceApi(MethodView):
+
+    @apiresult
+    @dataschema(schema)
+    def post(self, a, b):
+        return {'difference': a - b}
+
+bp.add_url_rule('/subtract', view_func=DifferenceApi.as_view('difference_method_view'))

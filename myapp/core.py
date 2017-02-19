@@ -1,10 +1,7 @@
 # This is called the "app factory".
-# I called it core.py, but it can be whatever you wish.
-# Be creative. :)
-from flask import Flask
 from werkzeug.utils import find_modules, import_string
 
-from myapp.api_helpers import ApiException, ApiResult
+from myapp.api_utils import ApiFlask, ApiException
 
 def create_app(config=None):
     app = ApiFlask(__name__)
@@ -14,13 +11,6 @@ def create_app(config=None):
     register_error_handlers(app)
     return app
 
-class ApiFlask(Flask):
-    """Response Converter"""
-    def make_response(self, rv):
-        if isinstance(rv, ApiResult):
-            return rv.to_response()
-        return Flask.make_response(self, rv)
-
 def register_blueprints(app):
     """Automagically register all blueprint packages
 
@@ -28,12 +18,16 @@ def register_blueprints(app):
     """
     for name in find_modules('myapp.blueprints', recursive=True):
         mod = import_string(name)
-        if hasattr(mod, 'blueprint'):
-            app.register_blueprint(mod.blueprint)
+        if hasattr(mod, 'bp'):
+            app.register_blueprint(mod.bp)
     return None
 
 def register_other_things(app):
     """e.g. extensions"""
+    return None
+
+def register_url_rules(app):
+    """eventually come up with a way"""
     return None
 
 def register_error_handlers(app):
