@@ -12,14 +12,10 @@ Run with a virtualenv:
     export FLASK_DEBUG=1
     flask run
 
-API behavior (using httpie):
+Interaction with the API using httpie (`pip install httpie`):
 
-    http ":5000/add?a=1&b=2"
-    http POST :5000/subtract a:=1 b:=24123
-
-Highlights:
-
-- Custom Voluptuous decorator for data validation
+    http ":5000/v1.0/sum?a=1&b=2"
+    http :5000/v1.0/difference a:=1 b:=2
 
 Coming soon:
 
