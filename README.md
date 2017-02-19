@@ -5,9 +5,12 @@ Based on the PyBay 2016 talk by Armin Ronacher.
 Here are the [slides](https://speakerdeck.com/player/94a53afb6a524ad88f301f62166a27e4?#).
 Here is the [talk](https://youtu.be/1ByQhAM5c1I). 
 
-Run with a virtualenv:
+Install from root directory (in a virtualenv) with:
 
     pip install -e .
+
+Run the application with:
+
     export FLASK_APP=myapp._devapp
     export FLASK_DEBUG=1
     flask run
